@@ -16,9 +16,9 @@ height = 1024
 
 pygame.init() #Intitialisiere Pygame
 #screen = pygame.display.set_mode((1280,1024),pygame.FULLSCREEN)
-screen = pygame.display.set_mode((width,height))
-background = pygame.Surface(screen.get_size()) #Create the background object
-background = background.convert() #Convert it to a background
+screen = pygame.display.set_mode((width,height)) #Zum testen kein Fullscreen
+background = pygame.Surface(screen.get_size())
+background = background.convert()
 
 #Globale Variablen
 progname = "HochzeitsCam v1.0 (c) Daniel Wandrei"
