@@ -2,7 +2,7 @@
 # cyBOOTH                                                            #
 ######################################################################
 
-#IMPORTS
+#Imports
 
 from __future__ import division
 import pygame
@@ -14,13 +14,13 @@ import os
 width = 1280
 height = 1024
 
-pygame.init() #Initialise pygame
+pygame.init() #Intitialisiere Pygame
 #screen = pygame.display.set_mode((1280,1024),pygame.FULLSCREEN)
 screen = pygame.display.set_mode((width,height))
 background = pygame.Surface(screen.get_size()) #Create the background object
 background = background.convert() #Convert it to a background
 
-#initialise global variables
+#Globale Variablen
 progname = "HochzeitsCam v1.0 (c) Daniel Wandrei"
 detetc_cam_cmd = "gphoto2 --auto-detect"
 cam_umount_cmd = "gvfs-mount -s gphoto2"
@@ -37,8 +37,8 @@ def UpdateDisplay( image ):
     background = pygame.image.load(backg_img)
     background = pygame.transform.scale(background, (width, height))
     screen.blit(background, (0, 0))
-    smallfont = pygame.font.SysFont("freeserif", 25) #Small font for banner message
-    bigfont = pygame.font.SysFont("freeserif", 50)  # Small font for banner message
+    smallfont = pygame.font.SysFont("freeserif", 25)
+    bigfont = pygame.font.SysFont("freeserif", 50)
     if (image != ""):
         image = pygame.image.load(image).convert_alpha()
         img_width =  image.get_width()
@@ -51,15 +51,15 @@ def UpdateDisplay( image ):
 
         screen.blit(image, (0, top_padding))
 
-    # Render progtext
+    # Rendere Progtext
     hud_progname = smallfont.render(progname,1, (0,0,255))
     screen.blit(hud_progname,(20,980))
 
-    # Render hud_counter
+    # Rendere HUD
     hud_counter = bigfont.render("Bild " + `counter` + " von " + `image_count`,1, (0,0,255))
-    screen.blit(hud_counter,(960,950)) #Write the image counter
+    screen.blit(hud_counter,(960,950))
 
-    if(Message != ""): #If the big message exits write it
+    if(Message != ""):
         font = pygame.font.SysFont("freeserif", 180)
         text = font.render(Message, 1, (0,0,255))
         textpos = text.get_rect()
@@ -67,7 +67,7 @@ def UpdateDisplay( image ):
         textpos.centery = background.get_rect().centery
         screen.blit(text, textpos)
 
-    pygame.draw.rect(screen,pygame.Color(0,0, 255),(10,10,1260,1004),2) #Draw the red outer box
+    pygame.draw.rect(screen,pygame.Color(0,0, 255),(10,10,1260,1004),2)
     pygame.display.flip()
 
     return
