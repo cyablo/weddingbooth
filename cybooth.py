@@ -16,14 +16,14 @@ width = 1280
 height = 1024
 
 pygame.init() #Pygame GO
-#screen = pygame.display.set_mode((1280,1024),pygame.FULLSCREEN) # Vorerst kein Fullscreen
-screen = pygame.display.set_mode((width,height))
+screen = pygame.display.set_mode((1280,1024),pygame.FULLSCREEN) # Vorerst kein Fullscreen
+#screen = pygame.display.set_mode((width,height))
 
 background = pygame.Surface(screen.get_size())
 background = background.convert()
 
 #Globale Variablen
-progname = "HochzeitsCam v1.0 (c) Daniel Wandrei"
+progname = "HochzeitsCam v1.1 (c) Daniel Wandrei"
 detect_cam_cmd = "gphoto2 --auto-detect"
 cam_umount_cmd = "gvfs-mount -s gphoto2"
 take_pic_cmd = "gphoto2 --capture-image-and-download --folder /images --force-overwrite"
@@ -115,7 +115,7 @@ time.sleep(3)
 
 # Ab hier Main-Loop
 while(continue_loop):
-    file_list = glob.glob(images_dir + "/*.jpg")
+    file_list = sorted(glob.glob(images_dir + "/*.jpg"), key=os.path.getmtime)
     image_count = len(file_list)
     counter = 0
     for file in file_list:
@@ -127,11 +127,12 @@ while(continue_loop):
                     print "quiting..."
                     sys.exit(0)
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN or vent.key == pygame.K_ESCAPE:
+                    if event.key == pygame.K_RETURN:
                         while True:
                             detect = sub.check_output(detect_cam_cmd, shell=True)
                             if "PTP" in detect:
-                                break
+                        	sub.Popen(cam_umount_cmd, stdout=sub.PIPE, stderr=sub.PIPE, shell=True)    
+				break
                             else:
                                 Message = "Kamera?"
                                 UpdateDisplay("")
@@ -150,13 +151,15 @@ while(continue_loop):
                                         UpdateDisplay("")
                                         time.sleep(1)
                                         break
-                        for timer in range(5, 0, -1):
-                            Message = timer
+                        image_pointer_list = glob.glob(images_dir + "/*.jpg")
+			image_pointer = len(image_pointer_list)
+			for timer in range(5, 0, -1):
+                            Message = str(timer)
                             UpdateDisplay("")
                             time.sleep(1)
                         Message = "SMILE ;)"
                         UpdateDisplay("")
-                        take_pic_command = "gphoto2 --capture-image-and-download --filename ./images/" + str(image_count + 1) + ".jpg --force-overwrite"
+                        take_pic_command = "gphoto2 --capture-image-and-download --filename ./images/" + str(image_pointer + 1) + ".jpg --force-overwrite"
                         pic = sub.Popen(take_pic_command, stdout=sub.PIPE, stderr=sub.PIPE, shell=True)
                         time.sleep(4)
                         Message = "Lade Bild..."
@@ -165,6 +168,6 @@ while(continue_loop):
                         Message = ""
                         UpdateDisplay("")
                         time.sleep(1)
-                        UpdateDisplay("./images/" + str(image_count + 1) + ".jpg")
+                        UpdateDisplay("./images/" + str(image_pointer + 1) + ".jpg")
                         time.sleep(10)
             time.sleep(0.001)
